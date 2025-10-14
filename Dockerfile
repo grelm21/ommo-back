@@ -21,35 +21,28 @@ FROM base as build
 RUN apt-get update -qq && \
     apt-get install --no-install-recommends -y build-essential git libpq-dev libvips pkg-config
 
-# Install application gems
-COPY Gemfile Gemfile.lock ./
-RUN bundle install && \
-    rm -rf ~/.bundle/ "${BUNDLE_PATH}"/ruby/*/cache "${BUNDLE_PATH}"/ruby/*/bundler/gems/*/.git && \
-    bundle exec bootsnap precompile --gemfile
+ENV RAILS_ROOT /var/www/ommo-back
+RUN mkdir -p $RAILS_ROOT
 
-# Copy application code
-COPY . .
+# Set working directory
+WORKDIR $RAILS_ROOT
 
-# Precompile bootsnap code for faster boot times
-RUN bundle exec bootsnap precompile app/ lib/
+# Adding project files
+COPY ./ .
 
+# Adding gems
+RUN rm -rf node_modules vendor
+RUN rm -f tmp/pids/server_1.pid
+RUN rm -f tmp/pids/server_2.pid
+RUN gem install rails bundler
 
-# Final stage for app image
-FROM base
-
-# Install packages needed for deployment
-RUN apt-get update -qq && \
-    apt-get install --no-install-recommends -y curl libvips postgresql-client && \
-    rm -rf /var/lib/apt/lists /var/cache/apt/archives
-
-# Copy built artifacts: gems, application
-COPY --from=build /usr/local/bundle /usr/local/bundle
-COPY --from=build /rails /rails
+RUN bundle install --jobs 20 --retry 5
+# RUN npm install
 
 # Run and own only the runtime files as a non-root user for security
-RUN useradd rails --create-home --shell /bin/bash && \
-    chown -R rails:rails db log storage tmp
-USER rails:rails
+# RUN useradd rails --create-home --shell /bin/bash && \
+#     chown -R rails:rails db log storage tmp
+# USER rails:rails
 
 EXPOSE 3000
 #CMD ["rails", "server", "-b", "0.0.0.0", "-e", "production" ]
