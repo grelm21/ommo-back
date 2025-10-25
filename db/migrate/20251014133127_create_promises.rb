@@ -4,6 +4,7 @@ class CreatePromises < ActiveRecord::Migration[7.1]
 
       t.string :code
       t.text :description
+      t.string :short_description
 
       t.timestamps
     end
