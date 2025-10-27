@@ -28,7 +28,7 @@ services:
       # If postgres container contain file with permissions postgres:postrges
       # stop container then comment string below, up container without string and rebuild with uncommented string
       # problem seen on docker-desktop mac os x
-      # - ./config/docker/postgresql.conf:/var/lib/postgresql/data/postgresql.conf
+      - ./bin/postgresql.conf:/var/lib/postgresql/data/postgresql.conf
 
 volumes:
   postgres:
