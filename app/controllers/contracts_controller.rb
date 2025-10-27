@@ -10,6 +10,11 @@ class ContractsController < ApplicationController
     end
   end
 
+  def show
+    @contract = Contract.find(params[:id])
+    render json: @contract.as_json(include: :partners)
+  end
+
   private
 
   def create_partners
