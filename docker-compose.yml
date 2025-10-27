@@ -10,7 +10,7 @@ services:
     environment:
       - PIDFILE=tmp/pids/server_1.pid
     ports:
-      - '3001:3000'
+      - '4040:3000'
     volumes:
       - ./:/var/www/ommo-back
 
@@ -20,7 +20,7 @@ services:
     environment:
       POSTGRES_USER: ommo
       POSTGRES_PASSWORD: '1234567890'
-      # PGDATA: /tmp
+      PGDATA: /tmp
     ports:
       - '5432:5432'
     volumes:
