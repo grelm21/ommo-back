@@ -84,5 +84,3 @@ test:
 production:
   <<: *default
   database: ommo_back_production
-  username: ommo_back
-  password: <%= ENV["OMMO_BACK_DATABASE_PASSWORD"] %>
