@@ -4,7 +4,7 @@ class ContractsController < ApplicationController
     @contract = Contract.create(partners: [@partner_one, @partner_two])
 
     if @contract.save
-      render json: @contract.as_json(include: :partners)
+      render json: @contract.as_json(include: { partners: { include: :promise } })
     else
       render json: { errors: { contract: @contract.errors.full_messages } }, status: :unprocessable_entity
     end
@@ -12,7 +12,7 @@ class ContractsController < ApplicationController
 
   def show
     @contract = Contract.find(params[:id])
-    render json: @contract.as_json(include: :partners)
+    render json: @contract.as_json(include: { partners: { include: :promise } })
   end
 
   private
