@@ -92,4 +92,6 @@ Rails.application.configure do
   config.hosts << "application"
   config.hosts << "balancer"
   config.hosts << "80.93.62.150"
+  config.hosts << "ommo-contract.ru"
+  config.hosts << "www.ommo-contract.ru"
 end
